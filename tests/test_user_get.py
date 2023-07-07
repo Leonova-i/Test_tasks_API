@@ -52,7 +52,6 @@ class TestUserGet(BC):
         Assertions.assert_json_has_keys(response2, expected_files)
 
         response3 = MyRequests.get('user/2')
-        print("******", response3.json(), "*************")
 
         Assertions.assert_json_has_key(response3, "username")
         Assertions.assert_json_has_not_key(response3, 'firstName')

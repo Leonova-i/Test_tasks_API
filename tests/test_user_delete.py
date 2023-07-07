@@ -37,14 +37,10 @@ class TestUserDelete(BC):
         email = data_login['email']
         password = data_login['password']
 
-        print(email, password)
-
         data = {
             'email': email,
             'password': password
         }
-
-        print(data)
 
         response = MyRequests.post('user/', data=data_login)
         Assertions.assert_status_code(response, 200)
