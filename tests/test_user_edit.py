@@ -106,3 +106,10 @@ class TestUserEdit(BC):
         Assertions.assert_status_code(response_fail_change, 400)
         assert response_fail_change.text == '{"error":"Too short value for field firstName"}'
         Assertions.assert_json_has_key(response_fail_change, "error")
+
+    @allure.story("Ira tests")
+    def test_edit_changes_without_auth(self):
+        response_fail_change = MyRequests.put(f'user/2', data={'firstName': "someName"})
+
+        Assertions.assert_status_code(response_fail_change, 400)
+        assert response_fail_change.text == "Auth token not supplied"
