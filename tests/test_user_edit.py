@@ -113,3 +113,21 @@ class TestUserEdit(BC):
 
         Assertions.assert_status_code(response_fail_change, 400)
         assert response_fail_change.text == "Auth token not supplied"
+
+    @allure.story("Ira tests")
+    def test_edit_changes_with_auth_another_user(self):
+        register_date = self.prepare_register_data()
+        email = register_date["email"]
+        password = register_date['password']
+        login_data_for_check = {'email': email, 'password': password}
+
+        response_create = MyRequests.post('user/', data=register_date)
+
+        Assertions.assert_status_code(response_create, 200)
+
+        MyRequests.post('user/login', data=login_data_for_check)
+
+        response_fail_change = MyRequests.put(f'user/2', data={'firstName': "someName"})
+
+        Assertions.assert_status_code(response_fail_change, 400)
+        assert response_fail_change.text == "Auth token not supplied"
