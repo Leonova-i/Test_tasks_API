@@ -82,11 +82,8 @@ class TestUserEdit(BC):
         Assertions.assert_status_code(response_fail_change, 400)
         assert response_fail_change.text == "Invalid email format"
 
-    # Попытаемся изменить firstName пользователя, будучи авторизованными тем же пользователем,
-    # на очень короткое значение в один символ
-
     @allure.story("Ira tests")
-    def test_edit_just_create_change_short_name(self):
+    def test_edit_change_short_name(self):
         register_date = self.prepare_register_data()
         email = register_date["email"]
         password = register_date['password']
@@ -108,3 +105,4 @@ class TestUserEdit(BC):
 
         Assertions.assert_status_code(response_fail_change, 400)
         assert response_fail_change.text == '{"error":"Too short value for field firstName"}'
+        Assertions.assert_json_has_key(response_fail_change, "error")
