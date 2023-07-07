@@ -1,6 +1,5 @@
 import allure
 import pytest
-
 from lib.my_requests import MyRequests
 from lib.base_case import BaseCase as BC
 from lib.assertions import Assertions
@@ -68,5 +67,3 @@ class TestUserRegister1(BC):
 
         Assertions.assert_status_code(response, 400), f"Unexpected status code '{response.status_code}'. " \
                                                       f"User has very long name"
-        # можно добавить assert c text "The value of '{username}' field is too short"
-
