@@ -32,14 +32,6 @@ class TestUserGet(BC):
         expected_files = ["username", 'firstName', 'lastName', 'email']
         Assertions.assert_json_has_keys(response2, expected_files)
 
-        response = MyRequests.get('user/2')
-        print(response.json())
-
-        Assertions.assert_json_has_key(response, "username")
-        Assertions.assert_json_has_not_key(response, 'firstName')
-        Assertions.assert_json_has_not_key(response, 'lastName')
-        Assertions.assert_json_has_not_key(response, 'email')
-
     @allure.story("Ira tests")
     def test_with_auth_user_and_check_another_user(self):
         data ={
