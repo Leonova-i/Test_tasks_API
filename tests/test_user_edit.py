@@ -50,6 +50,7 @@ class TestUserEdit(BC):
             new_name,
             "Wrong name of the user after edit"
         )
+
     @allure.story("Ira tests")
     def test_edit_just_create_user_without_at(self):
 
