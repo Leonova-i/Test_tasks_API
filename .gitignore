@@ -3,4 +3,4 @@
 __pycache__/
 logs/*
 tests_results
-lessons
+lessons/*

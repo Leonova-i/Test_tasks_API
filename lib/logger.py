@@ -4,7 +4,9 @@ from requests import Response
 
 
 class Logger:
-    file_name = f"logs/log_" + str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + ".log"
+    file_name = f"/Users/maksim/Desktop/git_exercise/Test_tasks_API/logs/log_" + \
+                str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + ".log"
+    print(file_name)
 
     @classmethod
     def _write_log_to_file(cls, data: str):
@@ -16,7 +18,7 @@ class Logger:
         testname = os.environ.get("PYTHON_CURRENT_TEST")
 
         data_to_add = f"\n-----\n"
-        data_to_add += f"Test: {testname}\n-----\n"
+        data_to_add += f"Test: {testname}\n"
         data_to_add += f"Time: {str(datetime.datetime.now())}\n"
         data_to_add += f"Request method: {method}\n"
         data_to_add += f"Request URL: {url}\n"
