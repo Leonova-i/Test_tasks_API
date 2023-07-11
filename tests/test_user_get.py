@@ -25,12 +25,12 @@ class TestUserGet(BC):
         token = self.get_header(response_login, "x-csrf-token")
         user_id_from_auth_method = self.get_json_value(response_login, "user_id")
 
-        response_het_auth = MyRequests.get(f"/user/{user_id_from_auth_method}",
+        response_get_auth = MyRequests.get(f"/user/{user_id_from_auth_method}",
                                            headers={"x-csrf-token": token},
                                            cookies={"auth_sid": auth_sid})
 
         expected_files = ["username", 'firstName', 'lastName', 'email']
-        Assertions.assert_json_has_keys(response_het_auth, expected_files)
+        Assertions.assert_json_has_keys(response_get_auth, expected_files)
 
     @allure.story("Ira tests")
     def test_with_auth_user_and_check_another_user(self):

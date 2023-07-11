@@ -5,7 +5,7 @@ from lib.base_case import BaseCase as BC
 from lib.assertions import Assertions
 
 
-class TestUserRegister1(BC):
+class TestUserRegister(BC):
     def test_create_successfully(self):
         data = self.prepare_register_data()
 

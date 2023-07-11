@@ -28,7 +28,6 @@ class TestUserAuth(BC):
             headers={"x-csrf-token": self.token},
             cookies={"auth_sid": self.auth_sid})
 
-        # 3 вызова заменили одним
         Assertions.assert_json_value_by_name(
             response_auth,
             "user_id",
