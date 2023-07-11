@@ -9,20 +9,20 @@ class TestUserRegister1(BC):
     def test_create_successfully(self):
         data = self.prepare_register_data()
 
-        response = MyRequests.post('/user/', data=data)
+        response_register = MyRequests.post('/user/', data=data)
 
-        Assertions.assert_status_code(response, 200)
-        Assertions.assert_json_has_key(response, "id")
+        Assertions.assert_status_code(response_register, 200)
+        Assertions.assert_json_has_key(response_register, "id")
 
     def test_create_user_with_existing_email(self):
         email = 'vinkotov@example.com'
         data = self.prepare_register_data(email)
 
-        response = MyRequests.post('user/', data=data)
+        response_register = MyRequests.post('user/', data=data)
 
-        assert response.status_code == 400, f"Unexpected status code '{response.status_code}'"
-        assert response.content.decode('utf-8') == f"Users with email '{email}' already exists", \
-            f"Unexpected content'{response.content}'"
+        Assertions.assert_status_code(response_register, 400)
+        assert response_register.content.decode('utf-8') == f"Users with email '{email}' already exists", \
+            f"Unexpected content'{response_register.content}'"
 
     @allure.story("Ira tests")
     def test_create_user_without_at(self):

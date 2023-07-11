@@ -1,6 +1,7 @@
 import datetime
 import os
 from requests import Response
+import pytest
 
 
 class Logger:
@@ -15,7 +16,8 @@ class Logger:
 
     @classmethod
     def add_request(cls, url: str, data: dict, headers: dict, cookies: dict, method: str):
-        testname = os.environ.get("PYTHON_CURRENT_TEST")
+        testname = os.environ.get('PYTHON_CURRENT_TEST', 'DefaultTestName')
+        print("****", testname, "********")
 
         data_to_add = f"\n-----\n"
         data_to_add += f"Test: {testname}\n"

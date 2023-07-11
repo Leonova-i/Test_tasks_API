@@ -9,43 +9,38 @@ import allure
 class TestUserEdit(BC):
 
     def test_edit_just_create_user(self):
-        # Register
         register_date = self.prepare_register_data()
+        response_register = MyRequests.post('user/', data=register_date)
 
-        response1 = MyRequests.post('user/', data=register_date)
-
-        Assertions.assert_status_code(response1, 200)
-        Assertions.assert_json_has_key(response1, "id")
+        Assertions.assert_status_code(response_register, 200)
+        Assertions.assert_json_has_key(response_register, "id")
 
         email = register_date["email"]
         password = register_date['password']
-        user_id = self.get_json_value(response1, 'id')
+        user_id = self.get_json_value(response_register, 'id')
 
-        # LOGIN
         login_data = {
             'email': email,
             'password': password
         }
 
-        response2 = MyRequests.post('user/login', data=login_data)
+        response_login = MyRequests.post('user/login', data=login_data)
+        auth_sid = self.get_cookie(response_login, 'auth_sid')
+        token = self.get_header(response_login, "x-csrf-token")
 
-        auth_sid = self.get_cookie(response2, 'auth_sid')
-        token = self.get_header(response2, "x-csrf-token")
-
-        # EDIT
         new_name = "Changed name"
-        response3 = MyRequests.put(f'user/{user_id}',
-                                   cookies={'auth_sid': auth_sid},
-                                   headers={"x-csrf-token": token},
-                                   data={'firstName': new_name})
+        response_put = MyRequests.put(f'user/{user_id}',
+                                      cookies={'auth_sid': auth_sid},
+                                      headers={"x-csrf-token": token},
+                                      data={'firstName': new_name})
+        Assertions.assert_status_code(response_put, 200)
 
-        Assertions.assert_status_code(response3, 200)
-
-        # GET
-        response4 = MyRequests.get(f'user/{user_id}', cookies={'auth_sid': auth_sid}, headers={"x-csrf-token": token})
+        response_check_put = MyRequests.get(f'user/{user_id}',
+                                            cookies={'auth_sid': auth_sid},
+                                            headers={"x-csrf-token": token})
 
         Assertions.assert_json_value_by_name(
-            response4,
+            response_check_put,
             "firstName",
             new_name,
             "Wrong name of the user after edit"
@@ -63,24 +58,21 @@ class TestUserEdit(BC):
 
         response_create = MyRequests.post('user/', data=register_date)
 
-        Assertions.assert_status_code(response_create , 200)
-        user_id = self.get_json_value(response_create , 'id')
+        Assertions.assert_status_code(response_create, 200)
+        user_id = self.get_json_value(response_create, 'id')
 
-        # LOGIN
-
-        response_login = MyRequests.post('user/login', data=login_data_for_check)
+        response_login = MyRequests.post('user/login',
+                                         data=login_data_for_check)
         auth_sid = self.get_cookie(response_login, 'auth_sid')
         token = self.get_header(response_login, "x-csrf-token")
 
-        # EDIT
-
-        response_fail_change = MyRequests.put(f'user/{user_id}',
+        response_check_changes = MyRequests.put(f'user/{user_id}',
                                               cookies={'auth_sid': auth_sid},
                                               headers={"x-csrf-token": token},
                                               data={'email': email_without_dt_for_check})
 
-        Assertions.assert_status_code(response_fail_change, 400)
-        assert response_fail_change.text == "Invalid email format"
+        Assertions.assert_status_code(response_check_changes, 400)
+        assert response_check_changes.text == "Invalid email format"
 
     @allure.story("Ira tests")
     def test_edit_change_short_name(self):
@@ -98,21 +90,21 @@ class TestUserEdit(BC):
         auth_sid = self.get_cookie(response_login, 'auth_sid')
         token = self.get_header(response_login, "x-csrf-token")
 
-        response_fail_change = MyRequests.put(f'user/{user_id}',
-                                              cookies={'auth_sid': auth_sid},
-                                              headers={"x-csrf-token": token},
-                                              data={'firstName': "i"})
+        response_check_changes = MyRequests.put(f'user/{user_id}',
+                                                cookies={'auth_sid': auth_sid},
+                                                headers={"x-csrf-token": token},
+                                                data={'firstName': "i"})
 
-        Assertions.assert_status_code(response_fail_change, 400)
-        assert response_fail_change.text == '{"error":"Too short value for field firstName"}'
-        Assertions.assert_json_has_key(response_fail_change, "error")
+        Assertions.assert_status_code(response_check_changes, 400)
+        assert response_check_changes.text == '{"error":"Too short value for field firstName"}'
+        Assertions.assert_json_has_key(response_check_changes, "error")
 
     @allure.story("Ira tests")
     def test_edit_changes_without_auth(self):
-        response_fail_change = MyRequests.put(f'user/2', data={'firstName': "someName"})
+        response_check_changes = MyRequests.put(f'user/2', data={'firstName': "someName"})
 
-        Assertions.assert_status_code(response_fail_change, 400)
-        assert response_fail_change.text == "Auth token not supplied"
+        Assertions.assert_status_code(response_check_changes, 400)
+        assert response_check_changes.text == "Auth token not supplied"
 
     @allure.story("Ira tests")
     def test_edit_changes_with_auth_another_user(self):
@@ -127,7 +119,7 @@ class TestUserEdit(BC):
 
         MyRequests.post('user/login', data=login_data_for_check)
 
-        response_fail_change = MyRequests.put(f'user/2', data={'firstName': "someName"})
+        response_check_changes = MyRequests.put(f'user/2', data={'firstName': "someName"})
 
-        Assertions.assert_status_code(response_fail_change, 400)
-        assert response_fail_change.text == "Auth token not supplied"
+        Assertions.assert_status_code(response_check_changes, 400)
+        assert response_check_changes.text == "Auth token not supplied"
