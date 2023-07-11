@@ -12,8 +12,8 @@
 ### to see allure reports run:  
  - allure serve tests_results/    
 
-
-<img width="822" alt="Screenshot 2023-07-07 at 11 08 11" src="https://github.com/Leonova-i/Test_tasks_API/assets/114931033/751017c8-3dd2-405e-a32b-c8da27da548c">    
+ <img width="815" alt="Screenshot 2023-07-11 at 10 11 54 copy" src="https://github.com/Leonova-i/Test_tasks_API/assets/114931033/4e1e54c2-3ca2-4a91-8396-bd21fa777b34">
+  
 
   
 ### u can see 21 tests with included 14 private tests:
